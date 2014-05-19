@@ -58,6 +58,10 @@ def sort_count(list, lenlist):
     """
     sorted_list = ListWithCount([], 0)
 
+    if lenlist == 0:
+        return sorted_list
+        #ensure that the list is not empty
+
     if lenlist == 1:
         sorted_list.set_list(list)
         sorted_list.set_count(0)
@@ -101,7 +105,7 @@ def merge_count_split_inv(listwc1, listwc2, lenlist):
             else:
                 my_ls.append(my_second[second_index])
                 second_index += 1
-                n_of_inv += 1
+                n_of_inv += len(my_first) - first_index - 1
         else:
             if first_index < len(my_first):  # items left in first half while second half is depicted
                 for index in range(first_index, len(my_first)):
@@ -111,7 +115,7 @@ def merge_count_split_inv(listwc1, listwc2, lenlist):
                 for index in range(second_index, len(my_second)):
                     my_ls.append(my_second[index])
 
-                    #  break
+            break
 
     result_list.set_list(my_ls)
     result_list.set_count(n_of_inv)
@@ -129,5 +133,6 @@ def test_sort_count(testlistfilename):
 # print ls[: len(ls) / 2]
 # print ls[len(ls) / 2:]
 test_sort_count("testFile1.txt")
-test_sort_count("testFile2.txt")
-test_sort_count("testFile3.txt")
+# test_sort_count("testFile2.txt")
+# test_sort_count("testFile3.txt")
+# test_sort_count("testFile4.txt")
