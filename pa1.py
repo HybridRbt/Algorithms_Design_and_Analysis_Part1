@@ -105,7 +105,7 @@ def merge_count_split_inv(listwc1, listwc2, lenlist):
             else:
                 my_ls.append(my_second[second_index])
                 second_index += 1
-                n_of_inv += len(my_first) - first_index - 1
+                n_of_inv += len(my_first) - first_index
         else:
             if first_index < len(my_first):  # items left in first half while second half is depicted
                 for index in range(first_index, len(my_first)):
@@ -132,7 +132,7 @@ def test_sort_count(testlistfilename):
 # ls = read_file("testFile.txt")
 # print ls[: len(ls) / 2]
 # print ls[len(ls) / 2:]
-test_sort_count("testFile1.txt")
+# test_sort_count("testFile1.txt")
 # test_sort_count("testFile2.txt")
 # test_sort_count("testFile3.txt")
 # test_sort_count("testFile4.txt")
