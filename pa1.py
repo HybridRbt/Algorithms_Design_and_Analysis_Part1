@@ -129,6 +129,13 @@ def test_sort_count(testlistfilename):
     print "The sorted list is " + str(result_listwc.get_list())
     print "The total number of inv is " + str(result_listwc.get_count())
 
+def test_sort_count_wo_ls_print(testlistfilename):
+    ini_list = read_file(testlistfilename)
+    result_listwc = sort_count(ini_list, len(ini_list))
+
+   # print "The sorted list is " + str(result_listwc.get_list())
+    print "The total number of inv is " + str(result_listwc.get_count())
+
 # ls = read_file("testFile.txt")
 # print ls[: len(ls) / 2]
 # print ls[len(ls) / 2:]
@@ -136,3 +143,4 @@ def test_sort_count(testlistfilename):
 # test_sort_count("testFile2.txt")
 # test_sort_count("testFile3.txt")
 # test_sort_count("testFile4.txt")
+test_sort_count("IntegerArray.txt")
