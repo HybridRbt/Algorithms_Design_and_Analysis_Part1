@@ -143,4 +143,4 @@ def test_sort_count_wo_ls_print(testlistfilename):
 # test_sort_count("testFile2.txt")
 # test_sort_count("testFile3.txt")
 # test_sort_count("testFile4.txt")
-test_sort_count("IntegerArray.txt")
+test_sort_count_wo_ls_print("IntegerArray.txt")
