@@ -75,8 +75,17 @@ def swap(a, x, y):
 
 
 def test_partition():
-    ls = read_file("testFile1.txt")
-    print partition(ls, 0, len(ls))
+    """
+    testFile1: should print out the original file
+    testFile2: should print out the original file
+    testFile3: empty input, skipped for now
+    testFile4: one swap between 6 & 1
+    """
+    for number in range(1, 5):
+        if number != 3:
+            fn = "testFile" + str(number) + ".txt"
+            ls = read_file(fn)
+            print partition(ls, 0, len(ls))
 
 test_partition()
 
