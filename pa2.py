@@ -2,46 +2,37 @@ __author__ = 'jeredyang'
 
 """
 Question 1
+GENERAL DIRECTIONS:
+Download the text file here.
 
-Download the text file.
+The file contains all of the integers between 1 and 10,000 (inclusive, with no repeats) in unsorted order. The integer
+in the ith row of the file gives you the ith entry of an input array.
 
-This file contains all of the 100,000 integers between 1 and 100,000 (inclusive) in some order, with no integer repeated.
+Your task is to compute the total number of comparisons used to sort the given input file by QuickSort. As you know, the
+number of comparisons depends on which elements are chosen as pivots, so we'll ask you to explore three different
+pivoting rules.
 
-Your task is to compute the number of inversions in the file given, where the ith row of the file indicates the ith entry
-of an array. Because of the large size of this array, you should implement the fast divide-and-conquer algorithm covered
-in the video lectures. The numeric answer for the given input file should be typed in the space below.
+You should not count comparisons one-by-one. Rather, when there is a recursive call on a subarray of length m, you
+should simply add m−1 to your running total of comparisons. (This is because the pivot element is compared to each of
+the other m−1 elements in the subarray in this recursive call.)
 
-So if your answer is 1198233847, then just type 1198233847 in the space provided without any space / commas / any other
-punctuation marks. You can make up to 5 attempts, and we'll use the best one for grading.
+WARNING: The Partition subroutine can be implemented in several different ways, and different implementations can give
+you differing numbers of comparisons. For this problem, you should implement the Partition subroutine exactly as it is
+described in the video lectures (otherwise you might get the wrong answer).
 
-(We do not require you to submit your code, so feel free to use any programming language you want --- just type the final
- numeric answer in the following space.)
+DIRECTIONS FOR THIS PROBLEM:
 
-[TIP: before submitting, first test the correctness of your program on some small test files or your own devising. Then
-post your best test cases to the discussion forums to help your fellow students!]
+For the first part of the programming assignment, you should always use the first element of the array as the pivot
+element.
+
+HOW TO GIVE US YOUR ANSWER:
+
+Type the numeric answer in the space provided.
+So if your answer is 1198233847, then just type 1198233847 in the space provided without any space / commas / other
+punctuation marks. You have 5 attempts to get the correct answer.
+(We do not require you to submit your code, so feel free to use the programming language of your choice, just type the
+numeric answer in the following space.)
 """
-
-
-class ListWithCount:
-    a_list = []
-    count = 0
-
-    def __init__(self, mylist, mycount):
-        self.a_list = mylist
-        self.count = mycount
-
-    def get_list(self):
-        return self.a_list
-
-    def get_count(self):
-        return self.count
-
-    def set_list(self, mylist):
-        self.a_list = mylist
-
-    def set_count(self, mycount):
-        self.count = mycount
-
 
 def read_file(filename):
     f = open(filename)
@@ -51,90 +42,34 @@ def read_file(filename):
     return out
 
 
-def sort_count(list, lenlist):
+def partition(a, p, l):
     """
-
-    :rtype : ListWithCount
+    a <= input array
+    p <= pivot chosen
+    l <= length of array
     """
-    sorted_list = ListWithCount([], 0)
+    i = p + 1
+    #start point of i as the lower bound of partition
 
-    if lenlist == 0:
-        return sorted_list
-        #ensure that the list is not empty
+    for j in range(p + 1, l + 1):
+        if a[j] < a[p]:
+            swap(a, j, i)
+            i += 1
 
-    if lenlist == 1:
-        sorted_list.set_list(list)
-        sorted_list.set_count(0)
-        return sorted_list
-    else:
-        my_first = list[: len(list) / 2]
-        first_half = sort_count(my_first, len(my_first))
-
-        my_second = list[len(list) / 2:]
-        second_half = sort_count(my_second, len(my_second))
-
-        sorted_list = merge_count_split_inv(first_half, second_half, lenlist)
-
-    first_count = first_half.get_count()
-    second_count = second_half.get_count()
-    sorted_count = sorted_list.get_count()
-
-    sorted_list.set_count(first_count + second_count + sorted_count)
-    return sorted_list
+    swap(a, p, i - 1)
 
 
-def merge_count_split_inv(listwc1, listwc2, lenlist):
+def swap(a, x, y):
     """
-
-    :rtype : ListWithCount
+    a <= input array
+    x <= 1st index
+    y <= 2nd index
     """
-    result_list = ListWithCount([], 0)
-    my_ls = result_list.get_list()
-    my_first = listwc1.get_list()
-    my_second = listwc2.get_list()
+    temp = a[x]
+    a[x] = a[y]
+    a[y] = temp
 
-    first_index = 0
-    second_index = 0
-    n_of_inv = 0
-
-    for index in range(0, lenlist):
-        if first_index < len(my_first) and second_index < len(my_second):
-            if my_first[first_index] < my_second[second_index]:
-                my_ls.append(my_first[first_index])
-                first_index += 1
-            else:
-                my_ls.append(my_second[second_index])
-                second_index += 1
-                n_of_inv += len(my_first) - first_index
-        else:
-            if first_index < len(my_first):  # items left in first half while second half is depicted
-                for index in range(first_index, len(my_first)):
-                    my_ls.append(my_first[index])
-
-            if second_index < len(my_second):  # items left in second half while first half is depicted
-                for index in range(second_index, len(my_second)):
-                    my_ls.append(my_second[index])
-
-            break
-
-    result_list.set_list(my_ls)
-    result_list.set_count(n_of_inv)
-    return result_list
-
-
-def test_sort_count(testlistfilename):
-    ini_list = read_file(testlistfilename)
-    result_listwc = sort_count(ini_list, len(ini_list))
-
-    print "The sorted list is " + str(result_listwc.get_list())
-    print "The total number of inv is " + str(result_listwc.get_count())
-
-def test_sort_count_wo_ls_print(testlistfilename):
-    ini_list = read_file(testlistfilename)
-    result_listwc = sort_count(ini_list, len(ini_list))
-
-   # print "The sorted list is " + str(result_listwc.get_list())
-    print "The total number of inv is " + str(result_listwc.get_count())
+    return a
 
 # ls = read_file("testFile.txt")
 # print ls[: len(ls) / 2]
@@ -143,4 +78,3 @@ def test_sort_count_wo_ls_print(testlistfilename):
 # test_sort_count("testFile2.txt")
 # test_sort_count("testFile3.txt")
 # test_sort_count("testFile4.txt")
-test_sort_count_wo_ls_print("IntegerArray.txt")
