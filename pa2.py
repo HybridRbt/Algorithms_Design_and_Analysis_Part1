@@ -108,17 +108,18 @@ def swap(a, x, y):
 cp_counter = 0  # a global counter for comparison
 
 
-def qsort(a, l):
+def qsort(a, l, para):
     """
     main quicksort function.
     a <= input array
     l <= length of array
+    para <= para for choosepivot()
     """
     global cp_counter
     if l == 1 or l == 0:
         return a  # if a is one-element array or empty, no need to sort
 
-    p = choosepivot(a, l)  # return first element for q1
+    p = choosepivot(a, l, para)  # return first element for q1
     a1 = partition(a, p, l)
     a1[:p] = qsort(a1[:p], len(a1[:p]))
     a1[p + 1:] = qsort(a1[p + 1:], len(a1[p + 1:]))
@@ -127,7 +128,7 @@ def qsort(a, l):
     return a1
 
 
-def choosepivot(a, l, para):
+def choosepivot(ar, l, para):
     """
     pick pivot for array a of length l
     para <= parameter for choosing the pivot
@@ -140,16 +141,16 @@ def choosepivot(a, l, para):
     elif para == 2:
         return -1
     else:
-        f = a[0]
-        la = a[-1]
-        m = a[l/2]
+        f = ar[0]
+        la = ar[-1]
+        m = ar[l/2]
         me = getmedian(f, la, m)
         return me
 
 
 def getmedian(x, y, z):
-    a = [x, y, z]
-    b = sorted(a)
+    aa = [x, y, z]
+    b = sorted(aa)
     return b[1]
 
 # def test_partition():
@@ -167,7 +168,7 @@ def getmedian(x, y, z):
 #             print qsort(ls, len(ls))
 
 
-def test_partition():
+def test1():
     """
     testFile1: should print out the original file
     testFile2: should print out the original file
@@ -181,8 +182,11 @@ def test_partition():
     ls = read_file(fn)
     print qsort(ls, len(ls))
 
-test_partition()
-print cp_counter
+# test1()
+# print cp_counter
+
+a = [8, 2, 9, 3, 5]
+print choosepivot(a, len(a), 3)
 
 # print ls[: len(ls) / 2]
 # print ls[len(ls) / 2:]
