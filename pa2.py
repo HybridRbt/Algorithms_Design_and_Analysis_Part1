@@ -76,7 +76,7 @@ def swap(a, x, y):
 
 def test_partition():
     ls = read_file("testFile1.txt")
-    print partition(ls, 1, len(ls))
+    print partition(ls, 0, len(ls))
 
 test_partition()
 
