@@ -73,6 +73,28 @@ def swap(a, x, y):
 
     return a
 
+def qsort(a, l):
+    """
+    main quicksort function.
+    a <= input array
+    l <= length of array
+    """
+    if l == 1 or l == 0:
+        return a  # if a is one-element array or empty, no need to sort
+
+    p = choosepivot(a, l)  # return first element for q1
+    ap = partition(a, p, l)
+    qsort(a[:ap], len(a[:ap]))
+    qsort(a[ap + 1:], len(a[ap + 1:]))
+    return a
+
+
+def choosepivot(a, l):
+    """
+    pick pivot for array a of length l
+    """
+    return 0 # return for first element for q1
+
 
 def test_partition():
     """
