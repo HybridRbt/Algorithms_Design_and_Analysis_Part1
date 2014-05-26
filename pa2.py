@@ -80,8 +80,9 @@ def test_partition():
     testFile2: should print out the original file
     testFile3: empty input, skipped for now
     testFile4: one swap between 6 & 1
+    testFile5: test case from video lec
     """
-    for number in range(1, 5):
+    for number in range(1, 6):
         if number != 3:
             fn = "testFile" + str(number) + ".txt"
             ls = read_file(fn)
