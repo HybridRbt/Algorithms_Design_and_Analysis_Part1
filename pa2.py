@@ -58,6 +58,7 @@ def partition(a, p, l):
             i += 1
 
     swap(a, p, i - 1)
+    return a
 
 
 def swap(a, x, y):
