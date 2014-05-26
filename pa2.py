@@ -45,7 +45,7 @@ def read_file(filename):
 
 def partition(a, p, l):
     """
-    a <= input array
+    work on global input array ls
     p <= pivot chosen
     l <= length of array
     """
@@ -73,6 +73,7 @@ def swap(a, x, y):
 
     return a
 
+
 def qsort(a, l):
     """
     main quicksort function.
@@ -83,17 +84,18 @@ def qsort(a, l):
         return a  # if a is one-element array or empty, no need to sort
 
     p = choosepivot(a, l)  # return first element for q1
-    ap = partition(a, p, l)
-    qsort(a[:ap], len(a[:ap]))
-    qsort(a[ap + 1:], len(a[ap + 1:]))
-    return a
+    a1 = partition(a, p, l)
+    a1[:p] = qsort(a1[:p], len(a1[:p]))
+    a1[p + 1:] = qsort(a1[p + 1:], len(a1[p + 1:]))
+
+    return a1
 
 
 def choosepivot(a, l):
     """
     pick pivot for array a of length l
     """
-    return 0 # return for first element for q1
+    return 0  # return for first element for q1
 
 
 def test_partition():
@@ -108,7 +110,8 @@ def test_partition():
         if number != 3:
             fn = "testFile" + str(number) + ".txt"
             ls = read_file(fn)
-            print partition(ls, 0, len(ls))
+            print qsort(ls, len(ls))
+
 
 test_partition()
 
