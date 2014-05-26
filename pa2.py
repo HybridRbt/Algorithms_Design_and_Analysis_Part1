@@ -73,6 +73,8 @@ def swap(a, x, y):
 
     return a
 
+cp_counter = 0  # a global counter for comparison
+
 
 def qsort(a, l):
     """
@@ -80,6 +82,7 @@ def qsort(a, l):
     a <= input array
     l <= length of array
     """
+    global cp_counter
     if l == 1 or l == 0:
         return a  # if a is one-element array or empty, no need to sort
 
@@ -88,6 +91,7 @@ def qsort(a, l):
     a1[:p] = qsort(a1[:p], len(a1[:p]))
     a1[p + 1:] = qsort(a1[p + 1:], len(a1[p + 1:]))
 
+    cp_counter += l - 1
     return a1
 
 
@@ -98,6 +102,20 @@ def choosepivot(a, l):
     return 0  # return for first element for q1
 
 
+# def test_partition():
+#     """
+#     testFile1: should print out the original file
+#     testFile2: should print out the original file
+#     testFile3: empty input, skipped for now
+#     testFile4: one swap between 6 & 1
+#     testFile5: test case from video lec
+#     """
+#     for number in range(1, 6):
+#         if number != 3:
+#             fn = "testFile" + str(number) + ".txt"
+#             ls = read_file(fn)
+#             print qsort(ls, len(ls))
+
 def test_partition():
     """
     testFile1: should print out the original file
@@ -106,14 +124,14 @@ def test_partition():
     testFile4: one swap between 6 & 1
     testFile5: test case from video lec
     """
-    for number in range(1, 6):
-        if number != 3:
-            fn = "testFile" + str(number) + ".txt"
-            ls = read_file(fn)
-            print qsort(ls, len(ls))
-
+    # for number in range(1, 6):
+    number = 1
+    fn = "testFile" + str(number) + ".txt"
+    ls = read_file(fn)
+    print qsort(ls, len(ls))
 
 test_partition()
+print cp_counter
 
 # print ls[: len(ls) / 2]
 # print ls[len(ls) / 2:]
