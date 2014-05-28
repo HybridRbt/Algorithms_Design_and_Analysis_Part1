@@ -184,22 +184,7 @@ def choosepivot(ar, l, para):
                 return l / 2
 
 
-# def test_partition():
-#     """
-#     testFile1: should print out the original file
-#     testFile2: should print out the original file
-#     testFile3: empty input, skipped for now
-#     testFile4: one swap between 6 & 1
-#     testFile5: test case from video lec
-#     """
-#     for number in range(1, 6):
-#         if number != 3:
-#             fn = "testFile" + str(number) + ".txt"
-#             ls = read_file(fn)
-#             print qsort(ls, len(ls))
-
-
-def test1():
+def test():
     """
     testFile1: should print out the original file
     testFile2: should print out the original file
@@ -209,7 +194,7 @@ def test1():
     """
     global global_cc
 
-    print "TEST1"
+    print "TEST\n"
     for number in range(1, 6):
         global_cc = 0
         fn = "testFile" + str(number) + ".txt"
@@ -217,78 +202,54 @@ def test1():
 
         print "Test: " + str(fn) + ", " + "Input: " + str(ls)
 
-        result = qsort(ls, len(ls), 1)  # add inline assertion to make sure sorting is correct
-        assert result == sorted(ls)
-
+        result1 = qsort(ls, len(ls), 1)  # add inline assertion to make sure sorting is correct
+        assert result1 == sorted(ls)
         print "Output: " + str(ls)
-        print "ComCount: " + str(global_cc)
-    print "\n"
+        print "ComCount1: " + str(global_cc)
 
-
-def test2():
-    """
-    testFile1: should print out the original file
-    testFile2: should print out the original file
-    testFile3: empty input, skipped for now
-    testFile4: one swap between 6 & 1
-    testFile5: test case from video lec
-    """
-    global global_cc
-
-    print  "TEST2"
-    for number in range(1, 6):
         global_cc = 0
         fn = "testFile" + str(number) + ".txt"
         ls = read_file(fn)
 
-        print "Test: " + str(fn) + ", " + "Input: " + str(ls)
+        result2 = qsort(ls, len(ls), 2)  # add inline assertion to make sure sorting is correct
+        assert result2 == sorted(ls)
+        print "ComCount2: " + str(global_cc)
 
-        result = qsort(ls, len(ls), 2)  # add inline assertion to make sure sorting is correct
-        assert result == sorted(ls)
-
-        print "Output: " + str(ls)
-        print "ComCount: " + str(global_cc)
-    print "\n"
-
-
-def test3():
-    """
-    testFile1: should print out the original file
-    testFile2: should print out the original file
-    testFile3: empty input, skipped for now
-    testFile4: one swap between 6 & 1
-    testFile5: test case from video lec
-    """
-    global global_cc
-
-    print "TEST3"
-    for number in range(1, 6):
         global_cc = 0
         fn = "testFile" + str(number) + ".txt"
         ls = read_file(fn)
 
-        print "Test: " + str(fn) + ", " + "Input: " + str(ls)
+        result3 = qsort(ls, len(ls), 3)  # add inline assertion to make sure sorting is correct
+        assert result3 == sorted(ls)
+        print "ComCount3: " + str(global_cc) + "\n"
 
-        result = qsort(ls, len(ls), 3)  # add inline assertion to make sure sorting is correct
-        assert result == sorted(ls)
+    print "RUN\n"
+    global_cc = 0
+    fn = "QuickSort.txt"
+    ls = read_file(fn)
 
-        print "Output: " + str(ls)
-        print "ComCount: " + str(global_cc)
-    print "\n"
+    # print "Test: " + str(fn) + ", " + "Input: " + str(ls)
 
-test1()
-test2()
-test3()
+    result1 = qsort(ls, len(ls), 1)  # add inline assertion to make sure sorting is correct
+    assert result1 == sorted(ls)
+    # print "Output: " + str(ls)
+    print "ComCount1: " + str(global_cc)
 
-# test2()
-# print cp_counter
-# #
-# test3()
-# print cp_counter
+    global_cc = 0
+    fn = "QuickSort.txt"
+    ls = read_file(fn)
 
-# print ls[: len(ls) / 2]
-# print ls[len(ls) / 2:]
-# test_sort_count("testFile1.txt")
-# test_sort_count("testFile2.txt")
-# test_sort_count("testFile3.txt")
-# test_sort_count("testFile4.txt")
+    result2 = qsort(ls, len(ls), 2)  # add inline assertion to make sure sorting is correct
+    assert result2 == sorted(ls)
+    print "ComCount2: " + str(global_cc)
+
+    global_cc = 0
+    fn = "QuickSort.txt"
+    ls = read_file(fn)
+
+    result3 = qsort(ls, len(ls), 3)  # add inline assertion to make sure sorting is correct
+    assert result3 == sorted(ls)
+    print "ComCount3: " + str(global_cc) + "\n"
+
+
+test()
