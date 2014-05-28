@@ -194,15 +194,6 @@ def choosepivot(ar, l, para):
                     return l / 2
 
 
-def testpivot():
-    print "size     first     last     median"
-    for number in [10, 100, 1000]:
-        fn = str(number) + ".txt"
-        ls = read_file(fn)
-
-        print str(len(ls)) + " " + str(ls[choosepivot(ls, len(ls), 1)]) + " " + str(ls[choosepivot(ls, len(ls), 2)]) + " " + str(ls[choosepivot(ls, len(ls), 3)])
-
-
 def test():
     """
     testFile1: should print out the original file
