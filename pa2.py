@@ -126,8 +126,7 @@ def qsort(a, l, para):
     main quicksort function.
     a <= input array
     l <= length of array
-    cc <= current cc
-    para <= para for choosepivot()
+
     """
     global global_cc
 
@@ -138,14 +137,17 @@ def qsort(a, l, para):
 
     if p == 0:
         par = partition(a, p, len(a) - 1)
-
         global_cc += l - 1
 
-        a[:par] = qsort(a[:par], len(a[:par]), 1)
-        a[par + 1:] = qsort(a[par + 1:], len(a[par + 1:]), 1)
+        a[:par] = qsort(a[:par], len(a[:par]), para)
+        a[par+1:] = qsort(a[par+1:], len(a[par+1:]), para)
     else:
         swap(a, 0, p)
-        a = qsort(a, l, 1)
+        par = partition(a, 0, len(a) - 1)
+        global_cc += l - 1
+
+        a[:par] = qsort(a[:par], len(a[:par]), para)
+        a[par+1:] = qsort(a[par+1:], len(a[par+1:]), para)
 
     return a
 
@@ -158,30 +160,47 @@ def choosepivot(ar, l, para):
     para == 2: return last element for q2
     para == 3: return median of first, last, and middle for q3
     """
-    if l == 1 or l == 0:
-        return 0
-
     if para == 1:
         return 0  # return for first element
     elif para == 2:
-        return l - 1  # return last element
-    else:
-        f = ar[0]
-        la = ar[l - 1]
-        if l % 2 == 0:
-            m = ar[l / 2 - 1]
-        else:
-            m = ar[l / 2]
-
-        if min(la, m) < f < max(la, m):
-            return 0
-        elif min(f, m) < la < max(f, m):
+        if l == 1 or l == 0:
+            return 0  # return last element
+        elif l > 1:
             return l - 1
-        elif min(f, la) < m < max(f, la):
-            if l % 2 == 0:
-                return l / 2 - 1
+    else:
+        if l == 1 or l == 0:
+            return 0  # return last element
+        elif l == 2:
+            if ar[0] > ar[1]:
+                return 0
             else:
-                return l / 2
+                return 1
+        else:
+            f = ar[0]
+            la = ar[l - 1]
+            if l % 2 == 0:
+                m = ar[l / 2 - 1]
+            else:
+                m = ar[l / 2]
+
+            if min(la, m) < f < max(la, m):
+                return 0
+            elif min(f, m) < la < max(f, m):
+                return l - 1
+            elif min(f, la) < m < max(f, la):
+                if l % 2 == 0:
+                    return l / 2 - 1
+                else:
+                    return l / 2
+
+
+def testpivot():
+    print "size     first     last     median"
+    for number in [10, 100, 1000]:
+        fn = str(number) + ".txt"
+        ls = read_file(fn)
+
+        print str(len(ls)) + " " + str(ls[choosepivot(ls, len(ls), 1)]) + " " + str(ls[choosepivot(ls, len(ls), 2)]) + " " + str(ls[choosepivot(ls, len(ls), 3)])
 
 
 def test():
@@ -195,9 +214,9 @@ def test():
     global global_cc
 
     print "TEST\n"
-    for number in range(1, 6):
+    for number in [10, 100, 1000]:
         global_cc = 0
-        fn = "testFile" + str(number) + ".txt"
+        fn = str(number) + ".txt"
         ls = read_file(fn)
 
         print "Test: " + str(fn) + ", " + "Input: " + str(ls)
@@ -208,48 +227,49 @@ def test():
         print "ComCount1: " + str(global_cc)
 
         global_cc = 0
-        fn = "testFile" + str(number) + ".txt"
+        fn = str(number) + ".txt"
         ls = read_file(fn)
 
         result2 = qsort(ls, len(ls), 2)  # add inline assertion to make sure sorting is correct
         assert result2 == sorted(ls)
+       # print "Output: " + str(ls)
         print "ComCount2: " + str(global_cc)
 
         global_cc = 0
-        fn = "testFile" + str(number) + ".txt"
+        fn = str(number) + ".txt"
         ls = read_file(fn)
 
         result3 = qsort(ls, len(ls), 3)  # add inline assertion to make sure sorting is correct
         assert result3 == sorted(ls)
         print "ComCount3: " + str(global_cc) + "\n"
 
-    print "RUN\n"
-    global_cc = 0
-    fn = "QuickSort.txt"
-    ls = read_file(fn)
-
-    # print "Test: " + str(fn) + ", " + "Input: " + str(ls)
-
-    result1 = qsort(ls, len(ls), 1)  # add inline assertion to make sure sorting is correct
-    assert result1 == sorted(ls)
-    # print "Output: " + str(ls)
-    print "ComCount1: " + str(global_cc)
-
-    global_cc = 0
-    fn = "QuickSort.txt"
-    ls = read_file(fn)
-
-    result2 = qsort(ls, len(ls), 2)  # add inline assertion to make sure sorting is correct
-    assert result2 == sorted(ls)
-    print "ComCount2: " + str(global_cc)
-
-    global_cc = 0
-    fn = "QuickSort.txt"
-    ls = read_file(fn)
-
-    result3 = qsort(ls, len(ls), 3)  # add inline assertion to make sure sorting is correct
-    assert result3 == sorted(ls)
-    print "ComCount3: " + str(global_cc) + "\n"
+    # print "RUN\n"
+    # global_cc = 0
+    # fn = "QuickSort.txt"
+    # ls = read_file(fn)
+    #
+    # # print "Test: " + str(fn) + ", " + "Input: " + str(ls)
+    #
+    # result1 = qsort(ls, len(ls), 1)  # add inline assertion to make sure sorting is correct
+    # assert result1 == sorted(ls)
+    # # print "Output: " + str(ls)
+    # print "ComCount1: " + str(global_cc)
+    #
+    # global_cc = 0
+    # fn = "QuickSort.txt"
+    # ls = read_file(fn)
+    #
+    # result2 = qsort(ls, len(ls), 2)  # add inline assertion to make sure sorting is correct
+    # assert result2 == sorted(ls)
+    # print "ComCount2: " + str(global_cc)
+    #
+    # global_cc = 0
+    # fn = "QuickSort.txt"
+    # ls = read_file(fn)
+    #
+    # result3 = qsort(ls, len(ls), 3)  # add inline assertion to make sure sorting is correct
+    # assert result3 == sorted(ls)
+    # print "ComCount3: " + str(global_cc) + "\n"
 
 
 test()
