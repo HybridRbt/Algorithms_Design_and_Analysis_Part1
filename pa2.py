@@ -33,6 +33,7 @@ __author__ = 'jeredyang'
 # (We do not require you to submit your code, so feel free to use the programming language of your choice, just type the
 # numeric answer in the following space.)
 # """
+#
 # Question 2
 # GENERAL DIRECTIONS AND HOW TO GIVE US YOUR ANSWER:
 # See the first question.
@@ -43,6 +44,7 @@ __author__ = 'jeredyang'
 # element. Again, be sure to implement the Partition subroutine exactly as it is described in the video lectures.
 # Recall from the lectures that, just before the main Partition subroutine, you should exchange the pivot element
 #  (i.e., the last element) with the first element.
+#
 # Question 3
 # GENERAL DIRECTIONS AND HOW TO GIVE US YOUR ANSWER:
 # See the first question.
@@ -75,22 +77,32 @@ def read_file(filename):
     return out
 
 
-def partition(a, p, l):
+def partition(a, l, r):
     """
-    work on global input array ls
-    p <= pivot chosen
-    l <= length of array
+    a <= input array
+    l <= first of input array
+    r <= last of input array
     """
-    i = p + 1
-    #start point of i as the lower bound of partition
+    if len(a) == 0 or len(a) == 1:
+        return l
+    elif len(a) == 2:
+        if a[0] > a[1]:
+            swap(a, 0, 1)
+            return 1
+        return 0
+    else:
+        print len(a)
+        p = a[l]
+        i = l + 1
 
-    for j in range(p + 1, l):
-        if a[j] < a[p]:
-            swap(a, j, i)
-            i += 1
+        for j in range(l + 1, r + 1):
+            if a[j] < p:
+                swap(a, j, i)
+                i += 1
 
-    swap(a, p, i - 1)
-    return a
+        swap(a, l, i - 1)
+
+        return i - 1
 
 
 def swap(a, x, y):
@@ -113,19 +125,21 @@ def qsort(a, l, para):
     main quicksort function.
     a <= input array
     l <= length of array
-    para <= para for choosepivot()
+    p <= para for choosepivot()
     """
     global cp_counter
+
     if l == 1 or l == 0:
         return a  # if a is one-element array or empty, no need to sort
 
-    p = choosepivot(a, l, para)  # return first element for q1
-    a1 = partition(a, p, l)
-    a1[:p] = qsort(a1[:p], len(a1[:p]))
-    a1[p + 1:] = qsort(a1[p + 1:], len(a1[p + 1:]))
+    par = partition(a, 0, len(a) - 1)
 
     cp_counter += l - 1
-    return a1
+
+    a[:par] = qsort(a[:par], len(a[:par]), 1)
+    a[par + 1:] = qsort(a[par+1:], len(a[par+1:]), 1)
+
+    return a
 
 
 def choosepivot(ar, l, para):
@@ -134,24 +148,34 @@ def choosepivot(ar, l, para):
     para <= parameter for choosing the pivot
     para == 1: return first element for q1
     para == 2: return last element for q2
-    para == 3: return median of first, last, and middle
+    para == 3: return median of first, last, and middle for q3
     """
-    if para == 1:
-        return 0  # return for first element for q1
-    elif para == 2:
-        return -1
-    else:
-        f = ar[0]
-        la = ar[-1]
-        m = ar[l/2]
-        me = getmedian(f, la, m)
-        return me
+    # if l == 1 or l == 0:
+    #     return 0
+    #
+    # if para == 1:
+    #     return 0  # return for first element for q1
+    # elif para == 2:
+    #     return l - 1
+    # else:
+    #     f = ar[0]
+    #     la = ar[l - 1]
+    #     if l % 2 == 0:
+    #         m = ar[l/2 - 1]
+    #     else:
+    #         m = ar[l/2]
+    #
+    #     if min(la, m) < f < max(la, m):
+    #         return 0
+    #     elif min(f, m) < la < max(f, m):
+    #         return l - 1
+    #     elif min(f, la) < m < max(f, la):
+    #         if l % 2 == 0:
+    #             return l/2 - 1
+    #         else:
+    #             return l/2
+    return 0
 
-
-def getmedian(x, y, z):
-    aa = [x, y, z]
-    b = sorted(aa)
-    return b[1]
 
 # def test_partition():
 #     """
@@ -177,16 +201,50 @@ def test1():
     testFile5: test case from video lec
     """
     # for number in range(1, 6):
+    #fn = "testFile" + str(number) + ".txt"
+    fn = "QuickSort.txt"
+    ls = read_file(fn)
+    result = qsort(ls, len(ls), 1)
+    assert result == sorted(ls)
+
+
+def test2():
+    """
+    testFile1: should print out the original file
+    testFile2: should print out the original file
+    testFile3: empty input, skipped for now
+    testFile4: one swap between 6 & 1
+    testFile5: test case from video lec
+    """
+    # for number in range(1, 6):
     number = 1
     fn = "testFile" + str(number) + ".txt"
     ls = read_file(fn)
-    print qsort(ls, len(ls))
+    print qsort(ls, len(ls), 2)
 
-# test1()
+
+def test3():
+    """
+    testFile1: should print out the original file
+    testFile2: should print out the original file
+    testFile3: empty input, skipped for now
+    testFile4: one swap between 6 & 1
+    testFile5: test case from video lec
+    """
+    # for number in range(1, 6):
+    number = 1
+    fn = "testFile" + str(number) + ".txt"
+    ls = read_file(fn)
+    print qsort(ls, len(ls), 3)
+
+test1()
+print cp_counter
+
+# test2()
 # print cp_counter
-
-a = [8, 2, 9, 3, 5]
-print choosepivot(a, len(a), 3)
+# #
+# test3()
+# print cp_counter
 
 # print ls[: len(ls) / 2]
 # print ls[len(ls) / 2:]
