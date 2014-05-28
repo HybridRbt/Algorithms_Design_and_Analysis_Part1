@@ -118,8 +118,7 @@ def swap(a, x, y):
 
     return a
 
-
-cp_counter = 0  # a global counter for comparison
+global_cc = 0
 
 
 def qsort(a, l, para):
@@ -127,19 +126,26 @@ def qsort(a, l, para):
     main quicksort function.
     a <= input array
     l <= length of array
-    p <= para for choosepivot()
+    cc <= current cc
+    para <= para for choosepivot()
     """
-    global cp_counter
+    global global_cc
 
     if l == 1 or l == 0:
         return a  # if a is one-element array or empty, no need to sort
 
-    par = partition(a, 0, len(a) - 1)
+    p = choosepivot(a, l, para)
 
-    cp_counter += l - 1
+    if p == 0:
+        par = partition(a, p, len(a) - 1)
 
-    a[:par] = qsort(a[:par], len(a[:par]), 1)
-    a[par + 1:] = qsort(a[par + 1:], len(a[par + 1:]), 1)
+        global_cc += l - 1
+
+        a[:par] = qsort(a[:par], len(a[:par]), 1)
+        a[par + 1:] = qsort(a[par + 1:], len(a[par + 1:]), 1)
+    else:
+        swap(a, 0, p)
+        a = qsort(a, l, 1)
 
     return a
 
@@ -201,16 +207,22 @@ def test1():
     testFile4: one swap between 6 & 1
     testFile5: test case from video lec
     """
+    global global_cc
+
+    print "TEST1"
     for number in range(1, 6):
+        global_cc = 0
         fn = "testFile" + str(number) + ".txt"
         ls = read_file(fn)
+
         print "Test: " + str(fn) + ", " + "Input: " + str(ls)
 
         result = qsort(ls, len(ls), 1)  # add inline assertion to make sure sorting is correct
         assert result == sorted(ls)
 
         print "Output: " + str(ls)
-
+        print "ComCount: " + str(global_cc)
+    print "\n"
 
 
 def test2():
@@ -221,11 +233,22 @@ def test2():
     testFile4: one swap between 6 & 1
     testFile5: test case from video lec
     """
-    # for number in range(1, 6):
-    number = 1
-    fn = "testFile" + str(number) + ".txt"
-    ls = read_file(fn)
-    print qsort(ls, len(ls), 2)
+    global global_cc
+
+    print  "TEST2"
+    for number in range(1, 6):
+        global_cc = 0
+        fn = "testFile" + str(number) + ".txt"
+        ls = read_file(fn)
+
+        print "Test: " + str(fn) + ", " + "Input: " + str(ls)
+
+        result = qsort(ls, len(ls), 2)  # add inline assertion to make sure sorting is correct
+        assert result == sorted(ls)
+
+        print "Output: " + str(ls)
+        print "ComCount: " + str(global_cc)
+    print "\n"
 
 
 def test3():
@@ -236,15 +259,26 @@ def test3():
     testFile4: one swap between 6 & 1
     testFile5: test case from video lec
     """
-    # for number in range(1, 6):
-    number = 1
-    fn = "testFile" + str(number) + ".txt"
-    ls = read_file(fn)
-    print qsort(ls, len(ls), 3)
+    global global_cc
 
+    print "TEST3"
+    for number in range(1, 6):
+        global_cc = 0
+        fn = "testFile" + str(number) + ".txt"
+        ls = read_file(fn)
+
+        print "Test: " + str(fn) + ", " + "Input: " + str(ls)
+
+        result = qsort(ls, len(ls), 3)  # add inline assertion to make sure sorting is correct
+        assert result == sorted(ls)
+
+        print "Output: " + str(ls)
+        print "ComCount: " + str(global_cc)
+    print "\n"
 
 test1()
-print cp_counter
+test2()
+test3()
 
 # test2()
 # print cp_counter
