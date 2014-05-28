@@ -82,6 +82,8 @@ def partition(a, l, r):
     a <= input array
     l <= first of input array
     r <= last of input array
+
+    will return the partition point p for recursive calls
     """
     if len(a) == 0 or len(a) == 1:
         return l
@@ -91,7 +93,6 @@ def partition(a, l, r):
             return 1
         return 0
     else:
-        print len(a)
         p = a[l]
         i = l + 1
 
@@ -117,6 +118,7 @@ def swap(a, x, y):
 
     return a
 
+
 cp_counter = 0  # a global counter for comparison
 
 
@@ -137,7 +139,7 @@ def qsort(a, l, para):
     cp_counter += l - 1
 
     a[:par] = qsort(a[:par], len(a[:par]), 1)
-    a[par + 1:] = qsort(a[par+1:], len(a[par+1:]), 1)
+    a[par + 1:] = qsort(a[par + 1:], len(a[par + 1:]), 1)
 
     return a
 
@@ -150,31 +152,30 @@ def choosepivot(ar, l, para):
     para == 2: return last element for q2
     para == 3: return median of first, last, and middle for q3
     """
-    # if l == 1 or l == 0:
-    #     return 0
-    #
-    # if para == 1:
-    #     return 0  # return for first element for q1
-    # elif para == 2:
-    #     return l - 1
-    # else:
-    #     f = ar[0]
-    #     la = ar[l - 1]
-    #     if l % 2 == 0:
-    #         m = ar[l/2 - 1]
-    #     else:
-    #         m = ar[l/2]
-    #
-    #     if min(la, m) < f < max(la, m):
-    #         return 0
-    #     elif min(f, m) < la < max(f, m):
-    #         return l - 1
-    #     elif min(f, la) < m < max(f, la):
-    #         if l % 2 == 0:
-    #             return l/2 - 1
-    #         else:
-    #             return l/2
-    return 0
+    if l == 1 or l == 0:
+        return 0
+
+    if para == 1:
+        return 0  # return for first element
+    elif para == 2:
+        return l - 1  # return last element
+    else:
+        f = ar[0]
+        la = ar[l - 1]
+        if l % 2 == 0:
+            m = ar[l / 2 - 1]
+        else:
+            m = ar[l / 2]
+
+        if min(la, m) < f < max(la, m):
+            return 0
+        elif min(f, m) < la < max(f, m):
+            return l - 1
+        elif min(f, la) < m < max(f, la):
+            if l % 2 == 0:
+                return l / 2 - 1
+            else:
+                return l / 2
 
 
 # def test_partition():
@@ -200,12 +201,16 @@ def test1():
     testFile4: one swap between 6 & 1
     testFile5: test case from video lec
     """
-    # for number in range(1, 6):
-    #fn = "testFile" + str(number) + ".txt"
-    fn = "QuickSort.txt"
-    ls = read_file(fn)
-    result = qsort(ls, len(ls), 1)
-    assert result == sorted(ls)
+    for number in range(1, 6):
+        fn = "testFile" + str(number) + ".txt"
+        ls = read_file(fn)
+        print "Test: " + str(fn) + ", " + "Input: " + str(ls)
+
+        result = qsort(ls, len(ls), 1)  # add inline assertion to make sure sorting is correct
+        assert result == sorted(ls)
+
+        print "Output: " + str(ls)
+
 
 
 def test2():
@@ -236,6 +241,7 @@ def test3():
     fn = "testFile" + str(number) + ".txt"
     ls = read_file(fn)
     print qsort(ls, len(ls), 3)
+
 
 test1()
 print cp_counter
