@@ -59,14 +59,55 @@ class Edge:
     def is_self_loop(self):
         return self.p1 == self.p2
 
-    def equal(self, edge):
-        assert isinstance(self.p1, Edge)
+    def rev(self, edge):
+        assert isinstance(edge, Edge)
         return self.p1 == edge.get_ep() and self.p2 == edge.get_sp()
         # reversed edge in an undirected graph are considered the same
+
+    def same(self, edge):
+        assert isinstance(edge, Edge)
+        return self.p1 == edge.get_sp() and self.p2 == edge.get_ep()
+        # same edge
 
     def op(self):  # present itself as a group of points (string)
         eg = "(" + str(self.p1) + ", " + str(self.p2) + ")"
         return eg
+
+
+# define edge list
+class EdgeList:
+    egl = []
+
+    def __init__(self):
+        self.egl = []
+
+    def get_list(self):
+        return self.egl
+
+    def is_in(self, edge):
+        assert isinstance(edge, Edge)
+        if len(self.egl) == 0:
+            return False   # empty list
+
+        for each_edge in self.egl:
+            if each_edge.rev(edge):  # same edge with reversed sp & ep
+                return True
+            elif each_edge.same(edge):  # already in this list
+                return True
+
+        return False
+
+    def add_eg(self, edge):
+        assert isinstance(edge, Edge)
+        if not self.is_in(edge):
+            self.egl.append(edge)
+
+    def op(self):  # present itself as a group of points (string)
+        egs = []
+        for each_eg in self.egl:
+            egs.append(each_eg.op())
+
+        return egs
 
 
 # define class graph
@@ -76,19 +117,22 @@ class Graph:
     """
     gr = []  # rep of gr as a list of lists
     vts = []  # record of all vertices in this graph
-    egs = []  # record of all edges in this graph
+    egs = EdgeList()  # record of all edges in this graph
 
     def __init__(self):  # empty constructor
         self.gr = []
         self.vts = []
-        self.egs = []
+        self.egs = EdgeList()
 
     def add_eg(self, sp, ep):
         edg = Edge(sp, ep)
-        if edg not in self.egs:  # this edge is not already in the list
-            self.egs.append(edg)
+        self.egs.add_eg(edg)  
 
-    def get_egs(self):
+    def add_v(self, p):
+        if not p in self.vts:
+            self.vts.append(p)
+
+    def get_eg_list(self):
         return self.egs
 
     def set_sp(self, sp):
@@ -121,12 +165,14 @@ def create_graph(list):
 
     return graph
 
-gr = Graph()
-gr.add_eg(1, 2)
-print gr.get_egs()[0].op()
+ed = Edge(1, 2)
+ed1 = Edge(3, 4)
+edl = EdgeList()
+edl.add_eg(ed)
+edl.add_eg(ed)
 
 
-
+print edl.op()
 
 
 
