@@ -26,6 +26,33 @@ def read_file(filename):
 
     return out
 
-out = read_file("kargerMinCut.txt")
-print out[0]
-print out[1]
+
+# define edge
+class Edge:
+    p1 = 0
+    p2 = 0
+
+    def __init__(self, sp, ep):
+        self.p1 = sp
+        self.p2 = ep
+
+    def get_sp(self):
+        return self.p1
+
+    def get_ep(self):
+        return self.p2
+
+    def set_sp(self, sp):
+        self.p1 = sp
+
+    def set_ep(self, ep):
+        self.p2 = ep
+
+    def is_self_loop(self):
+        return self.p1 == self.p2
+
+    def equal(self, edge):
+        assert isinstance(self.p1, Edge)
+        return self.p1 == edge.get_ep() and self.p2 == edge.get_sp()
+        # reversed edge in an undirected graph are considered the same
+
