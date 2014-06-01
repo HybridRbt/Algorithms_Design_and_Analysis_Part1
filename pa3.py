@@ -65,7 +65,48 @@ class Edge:
         # reversed edge in an undirected graph are considered the same
 
     def op(self):  # present itself as a group of points (string)
-        eg = "(" + self.p1 + ", " + self.p2 + ")"
+        eg = "(" + str(self.p1) + ", " + str(self.p2) + ")"
+        return eg
+
+
+# define class graph
+class Graph:
+    """
+    class definition for graph.
+    """
+    gr = []  # rep of gr as a list of lists
+    vts = []  # record of all vertices in this graph
+    egs = []  # record of all edges in this graph
+
+    def __init__(self):  # empty constructor
+        self.gr = []
+        self.vts = []
+        self.egs = []
+
+    def add_eg(self, sp, ep):
+        edg = Edge(sp, ep)
+        if edg not in self.egs:  # this edge is not already in the list
+            self.egs.append(edg)
+
+    def get_egs(self):
+        return self.egs
+
+    def set_sp(self, sp):
+        self.p1 = sp
+
+    def set_ep(self, ep):
+        self.p2 = ep
+
+    def is_self_loop(self):
+        return self.p1 == self.p2
+
+    def equal(self, edge):
+        assert isinstance(self.p1, Edge)
+        return self.p1 == edge.get_ep() and self.p2 == edge.get_sp()
+        # reversed edge in an undirected graph are considered the same
+
+    def op(self):  # present itself as a group of points (string)
+        eg = "(" + str(self.p1) + ", " + str(self.p2) + ")"
         return eg
 
 
@@ -80,11 +121,11 @@ def create_graph(list):
 
     return graph
 
-ls_p = read_csv("kargerMinCut.txt")
-gr = create_graph(ls_p)
+gr = Graph()
+gr.add_eg(1, 2)
+print gr.get_egs()[0].op()
 
-print gr[0].op()
-print gr[1].op()
+
 
 
 
