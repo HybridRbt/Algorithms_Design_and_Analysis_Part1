@@ -94,17 +94,14 @@ class EdgeList:
             if each_edge.rev(edge):  # same edge with reversed sp & ep
                 return True
             elif each_edge.same(edge):  # already in this list
-                return True
+                return False
 
         return False
 
-    def add_eg(self, edge, allow_dup):
+    def add_eg(self, edge):
         assert isinstance(edge, Edge)
-        if allow_dup:
+        if not self.is_in(edge):
             self.egl.append(edge)
-        else:
-            if not self.is_in(edge):
-                self.egl.append(edge)
 
     def del_eg(self, edge):
         assert isinstance(edge, Edge)
