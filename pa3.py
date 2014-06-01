@@ -1,3 +1,5 @@
+import csv
+
 __author__ = 'jeredyang'
 
 """
@@ -18,13 +20,19 @@ your numeric answer in the space provided. So e.g., if your answer is 5, just ty
 """
 
 
-# read input file line by line and put it in a list
-def read_file(filename):
-    f = open(filename)
-    out = [line.strip() for line in f]
-    f.close()
+# read input file as csv file
+def read_csv(fn):
+    """
+    return a list of lists, in which each list is started with a vertex and followed by all of its adjacent end points
+    """
+    lsp = []  # list of points
+    with open(fn, 'r') as f:
+        reader = csv.reader(f, delimiter='\t')
+        for row in reader:  # each row is a list of points
+            lsp.append(row)
+        f.close()
 
-    return out
+    return lsp
 
 
 # define edge
@@ -55,4 +63,31 @@ class Edge:
         assert isinstance(self.p1, Edge)
         return self.p1 == edge.get_ep() and self.p2 == edge.get_sp()
         # reversed edge in an undirected graph are considered the same
+
+    def op(self):  # present itself as a group of points (string)
+        eg = "(" + self.p1 + ", " + self.p2 + ")"
+        return eg
+
+
+# create graph from given list
+def create_graph(list):
+    graph = []  # graph is a list of edges
+    for each_line in list:
+        sp = each_line[0]  # start point is line[0]
+        for ep_index in range(0, len(each_line)):  # for each item after line[0] in each line, create an edge
+            if each_line[ep_index] != "\t":
+                new_edge = Edge(sp, each_line[ep_index])
+                graph.append(new_edge)
+
+    return graph
+
+ls_p = read_csv("kargerMinCut.txt")
+
+
+
+
+
+
+
+
 
