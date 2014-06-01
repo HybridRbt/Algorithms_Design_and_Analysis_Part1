@@ -74,15 +74,17 @@ def create_graph(list):
     graph = []  # graph is a list of edges
     for each_line in list:
         sp = each_line[0]  # start point is line[0]
-        for ep_index in range(0, len(each_line)):  # for each item after line[0] in each line, create an edge
-            if each_line[ep_index] != "\t":
-                new_edge = Edge(sp, each_line[ep_index])
-                graph.append(new_edge)
+        for ep_index in range(1, len(each_line)):  # for each item after line[0] in each line, create an edge
+            new_edge = Edge(sp, each_line[ep_index])
+            graph.append(new_edge)
 
     return graph
 
 ls_p = read_csv("kargerMinCut.txt")
+gr = create_graph(ls_p)
 
+print gr[0].op()
+print gr[1].op()
 
 
 
