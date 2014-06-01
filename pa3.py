@@ -22,13 +22,13 @@ your numeric answer in the space provided. So e.g., if your answer is 5, just ty
 
 
 # read input file as csv file
-def read_csv(fn):
+def read_csv(fn, delim):
     """
     return a list of lists, in which each list is started with a vertex and followed by all of its adjacent end points
     """
     lsp = []  # list of points
     with open(fn, 'r') as f:
-        reader = csv.reader(f, delimiter='\t')
+        reader = csv.reader(f, delimiter=delim)
         for row in reader:  # each row is a list of points
             lsp.append(row)
         f.close()
@@ -61,12 +61,12 @@ class Edge:
         return self.p1 == self.p2
 
     def rev(self, edge):
-        assert isinstance(edge, Edge)
+       # assert isinstance(edge, Edge)
         return self.p1 == edge.get_ep() and self.p2 == edge.get_sp()
         # reversed edge in an undirected graph are considered the same
 
     def same(self, edge):
-        assert isinstance(edge, Edge)
+       # assert isinstance(edge, Edge)
         return self.p1 == edge.get_sp() and self.p2 == edge.get_ep()
         # same edge
 
@@ -86,7 +86,7 @@ class EdgeList:
         return self.egl
 
     def is_in(self, edge):
-        assert isinstance(edge, Edge)
+       # assert isinstance(edge, Edge)
         if len(self.egl) == 0:
             return False  # empty list
 
@@ -99,13 +99,13 @@ class EdgeList:
         return False
 
     def add_eg(self, edge):
-        assert isinstance(edge, Edge)
+      #  assert isinstance(edge, Edge)
         if not self.is_in(edge):
             self.egl.append(edge)
 
     def del_eg(self, edge):
-        assert isinstance(edge, Edge)
-        assert edge in self.egl
+    #    assert isinstance(edge, Edge)
+     #   assert edge in self.egl
 
         self.egl.remove(edge)
         return self.egl
@@ -183,8 +183,8 @@ class Graph:
     def contraction(self, edge):
         vp = edge.get_sp()
 
-        self.egs.del_eg(edge)
         self.vts.remove(vp)
+        self.egs.del_eg(edge)
 
         remain_egls_sp = self.egs.get_edge_sp(vp)
         remain_egls_ep = self.egs.get_edge_ep(vp)
@@ -194,22 +194,20 @@ class Graph:
                 new_sp = edge.get_ep()
                 new_ep = each_edge.get_ep()
                 new_ed = Edge(new_sp, new_ep)
-                if self.egs.is_in(new_ed):
+                if self.get_eg_list().is_in(new_ed):
                     new_ed = Edge(new_ep, new_sp)
-                self.egs.add_eg(new_ed)
-                self.egs.del_eg(each_edge)
+                self.get_eg_list().add_eg(new_ed)
+                self.get_eg_list().del_eg(each_edge)
 
         if len(remain_egls_ep) != 0:
             for each_edge in remain_egls_ep:
                 new_sp = each_edge.get_sp()
                 new_ep = edge.get_ep()
                 new_ed = Edge(new_sp, new_ep)
-                if self.egs.is_in(new_ed):
+                if self.get_eg_list().is_in(new_ed):
                     new_ed = Edge(new_ep, new_sp)
-                self.egs.add_eg(new_ed)
-                self.egs.del_eg(each_edge)
-
-        return self.egs
+                self.get_eg_list().add_eg(new_ed)
+                self.get_eg_list().del_eg(each_edge)
 
 
 # create graph from given list
@@ -227,48 +225,50 @@ def create_graph(ls):
 
 def min_cut(graph):
     while len(graph.get_v_list()) > 2:
-        ran_v = random.choice(graph.get_v_list())
-        ran_edge_list = graph.get_eg_list().get_edge(ran_v)
-        ran_edge = random.choice(ran_edge_list)
+        random.seed()
+        edge_list = graph.get_eg_list().get_list()
+        ran_edge = random.choice(edge_list)
+        while not (ran_edge.get_sp() in graph.get_v_list() or ran_edge.get_ep() in graph.get_v_list()):
+            ran_edge = random.choice(edge_list)
         graph.contraction(ran_edge)
         graph.get_eg_list().clean()
 
-    remain_e_ls = graph.get_eg_list().get_list()
+    remain_e_ls = graph.get_eg_list().op()
     return len(remain_e_ls)
 
 
-def min_cut_rep(graph):
-    abs_min = 0
-    rep_times = 100
+def min_cut_rep(fn, delim):
+    abs_min = []
+    rep_times = 500
+
     for n in range(0, rep_times):
-        min_c = min_cut(graph)
-        if abs_min > min_c:
-            abs_min = min_c
+        lst = read_csv(fn, delim)
+        gra = create_graph(lst)
 
-    return abs_min
+        min_c = min_cut(gra)
+        abs_min.append(min_c)
 
-# as long as len(graph.v_list) > 2:
-#   randomly choose an edge:
-#     randomly choose a v:
-#         randomly choose an edge start from v:
-#  graph.contraction(edge)
-#  graph.get_eg_list().clean()
-#
-# return len(graph.get_eg_list())
+    return sorted(abs_min)[0]
+
 
 def test():
-    fn = "simple.txt"
-    lst = read_csv(fn)
-    print lst
-    gra = create_graph(lst)
-    print gra.pt_eg_list()
-    print gra.get_v_list()
+    minct = []
+    minct.append(min_cut_rep("test1.txt", " "))
+    minct.append(min_cut_rep("test2.txt", " "))
+    minct.append(min_cut_rep("test3.txt", " "))
+    minct.append(min_cut_rep("test4.txt", " "))
+    minct.append(min_cut_rep("test5.txt", " "))
+    print str(minct[0]) + ", 3"
+    print str(minct[1]) + ", 2"
+    print str(minct[2]) + ", 2"
+    print str(minct[3]) + ", 1"
+    print str(minct[4]) + ", 1"
 
-    minct = min_cut(gra)
+def run():
+    minct = min_cut_rep("kargerMinCut.txt", "\t")
     print minct
 
-
-test()
+run()
 
 
 
