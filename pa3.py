@@ -93,7 +93,7 @@ class EdgeList:
         for each_edge in self.egl:
             if each_edge.rev(edge):  # same edge with reversed sp & ep
                 return True
-            elif each_edge.same(edge):  # already in this list
+            elif each_edge.same(edge):  # already in this list, add dup
                 return False
 
         return False
@@ -110,10 +110,26 @@ class EdgeList:
         self.egl.remove(edge)
         return self.egl
 
-    def get_edge(self, sp):
+    def get_edge(self, p):
         edge_ls = []
         for each_edge in self.egl:
-            if each_edge.get_sp() == sp or each_edge.get_ep() == sp:
+            if each_edge.get_sp() == p or each_edge.get_ep() == p:
+                edge_ls.append(each_edge)
+
+        return edge_ls
+
+    def get_edge_sp(self, sp):
+        edge_ls = []
+        for each_edge in self.egl:
+            if each_edge.get_sp() == sp:
+                edge_ls.append(each_edge)
+
+        return edge_ls
+
+    def get_edge_ep(self, ep):
+        edge_ls = []
+        for each_edge in self.egl:
+            if each_edge.get_ep() == ep:
                 edge_ls.append(each_edge)
 
         return edge_ls
@@ -165,13 +181,35 @@ class Graph:
         return self.vts
 
     def contraction(self, edge):
+        vp = edge.get_sp()
+
         self.egs.del_eg(edge)
-        self.vts.remove(edge.get_sp())
-        for each_edge in self.egs.get_edge(edge.get_sp()):
-            new_sp = edge.get_ep()
-            new_ep = each_edge.get_ep()
-            new_ed = Edge(new_sp, new_ep)
-            self.egs.add_eg(new_ed)
+        self.vts.remove(vp)
+
+        remain_egls_sp = self.egs.get_edge_sp(vp)
+        remain_egls_ep = self.egs.get_edge_ep(vp)
+
+        if len(remain_egls_sp) != 0:
+            for each_edge in remain_egls_sp:
+                new_sp = edge.get_ep()
+                new_ep = each_edge.get_ep()
+                new_ed = Edge(new_sp, new_ep)
+                if self.egs.is_in(new_ed):
+                    new_ed = Edge(new_ep, new_sp)
+                self.egs.add_eg(new_ed)
+                self.egs.del_eg(each_edge)
+
+        if len(remain_egls_ep) != 0:
+            for each_edge in remain_egls_ep:
+                new_sp = each_edge.get_sp()
+                new_ep = edge.get_ep()
+                new_ed = Edge(new_sp, new_ep)
+                if self.egs.is_in(new_ed):
+                    new_ed = Edge(new_ep, new_sp)
+                self.egs.add_eg(new_ed)
+                self.egs.del_eg(each_edge)
+
+        return self.egs
 
 
 # create graph from given list
@@ -188,15 +226,26 @@ def create_graph(ls):
 
 
 def min_cut(graph):
-    while len(graph.get_eg_list().get_list()) > 2:
+    while len(graph.get_v_list()) > 2:
         ran_v = random.choice(graph.get_v_list())
         ran_edge_list = graph.get_eg_list().get_edge(ran_v)
         ran_edge = random.choice(ran_edge_list)
         graph.contraction(ran_edge)
         graph.get_eg_list().clean()
 
-    return len(graph.get_eg_list())
+    remain_e_ls = graph.get_eg_list().get_list()
+    return len(remain_e_ls)
 
+
+def min_cut_rep(graph):
+    abs_min = 0
+    rep_times = 100
+    for n in range(0, rep_times):
+        min_c = min_cut(graph)
+        if abs_min > min_c:
+            abs_min = min_c
+
+    return abs_min
 
 # as long as len(graph.v_list) > 2:
 #   randomly choose an edge:
