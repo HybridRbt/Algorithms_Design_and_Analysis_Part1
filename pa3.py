@@ -216,7 +216,7 @@ def create_graph(ls):
     for each_line in ls:
         sp = each_line[0]  # start point is line[0]
         gr.add_v(sp)
-        for ep_index in range(1, len(each_line)):  # for each item after line[0] in each line, create an edge
+        for ep_index in range(1, len(each_line) - 1):  # for each item after line[0] in each line, create an edge
             gr.add_eg(sp, each_line[ep_index])
             gr.add_v(each_line[ep_index])
 
