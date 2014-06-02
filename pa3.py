@@ -264,6 +264,7 @@ def test():
     print str(minct[3]) + ", 1"
     print str(minct[4]) + ", 1"
 
+
 def run():
     minct = min_cut_rep("kargerMinCut.txt", "\t")
     print minct
