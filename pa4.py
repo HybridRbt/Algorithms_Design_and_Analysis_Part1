@@ -32,8 +32,8 @@ def read_file(file_name):
     lines = []  # list of points
     with open(file_name, 'r') as f:
         for line in f:
-            l = line.rstrip()
-            new_points = [l[0], l[2]]
+            l = line.rstrip().split()
+            new_points = [l[0], l[1]]
             lines.append(new_points)
         f.close()
 
@@ -45,12 +45,13 @@ def reverse_g(g):
     reverse the input graph g (reverse all its arcs)
     :param g: input graph as a list of strings, in which each string represents a pair of points separated
     by a space
-    :return: reversed graph rg as a list of strings
+    :return: a new reversed graph rg as a list of strings
     """
-    for each_string in g:
-        reverse_arc(each_string)
+    rg = []
+    for each_list in g:
+        rg.append(reverse_arc(each_list))
 
-    return g
+    return rg
 
 
 def reverse_arc(arc):
@@ -59,10 +60,8 @@ def reverse_arc(arc):
     :param arc: arc[0] as start point, arc[1] as end point
     :return: reversed arc
     """
-    temp = arc[0]
-    arc[0] = arc[1]
-    arc[1] = temp
-
+    ra = [arc[1], arc[0]]
+    return ra
 
 def generate_dic_ex(g):
     """
@@ -79,6 +78,24 @@ def generate_dic_ex(g):
     return dex
 
 
+def generate_dic_ed(g):
+    """
+    generate a dictionary of vertices on graph g. use each vertex as key, and its outgoing edges (as a list) as value
+    :param g: input graph
+    :return: a dictionary
+    """
+    ded = {}
+    for each_pair_of_points in g:
+        new_key = each_pair_of_points[0]
+        new_value = each_pair_of_points[1]
+        if not new_key in ded:  # this vertex is not in ded
+            ded[new_key] = [new_value]
+        else:
+            ded[new_key].append(new_value)  # if already in, add to the list
+
+    return ded
+
+
 def dfs(g, s, ex):
     """
     depth first search on graph g from vertex s
@@ -88,20 +105,23 @@ def dfs(g, s, ex):
     :return: none
     """
     ex[s] = True  # mark s as explored
-    
+
 
 
 def tests():
     # test read file
-    fn = "SCC.txt"
+    fn = "SCCtest.txt"
     graph = read_file(fn)
-    print graph[0:3]
+    print graph
 
-    pg = graph[0:3]
+    pg = graph
     rpg = reverse_g(pg)
     print rpg
 
     dex = generate_dic_ex(pg)
     print dex
+
+    ded = generate_dic_ed(pg)
+    print ded
 
 tests()
