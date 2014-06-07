@@ -72,9 +72,10 @@ def generate_dic_ex(g):
     """
     dex = {}
     for each_pair_of_points in g:
-        new_key = each_pair_of_points[0]
-        if not new_key in dex:
-            dex[new_key] = False  # initialize all vertices as unexplored
+        for each_p in each_pair_of_points:
+            new_key = each_p
+            if not new_key in dex:
+                dex[new_key] = False  # initialize all vertices as unexplored
 
     return dex
 
@@ -130,6 +131,6 @@ def tests():
     ded = generate_dic_ed(pg)
     print ded
 
-    dfs(pg, '1', dex, ded)
+    dfs(pg, 's', dex, ded)
 
 tests()
