@@ -109,10 +109,10 @@ def dfs(g, s, ex, ed):
     """
     ex[s] = True  # mark s as explored
     print "I'm at node " + s
-    for each_v in ed[s]:  # for every edge starts from s and ends at v
-        if not ex[each_v]:  # v is unexplored
-            dfs(g, each_v, ex, ed)
-
+    if s in ed:  # if s has outgoing edges
+        for each_v in ed[s]:  # for every edge starts from s and ends at v
+            if not ex[each_v]:  # v is unexplored
+                dfs(g, each_v, ex, ed)
 
 
 def tests():
