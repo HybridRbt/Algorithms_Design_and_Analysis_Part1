@@ -63,6 +63,7 @@ def reverse_arc(arc):
     ra = [arc[1], arc[0]]
     return ra
 
+
 def generate_dic_ex(g):
     """
     generate a dictionary of vertices on graph g to keep track of whether a vertex has been explored
@@ -96,21 +97,26 @@ def generate_dic_ed(g):
     return ded
 
 
-def dfs(g, s, ex):
+def dfs(g, s, ex, ed):
     """
     depth first search on graph g from vertex s
     :param g: input graph
     :param s: start vertex s
     :param ex: a dictionary to mark if a vertex has been explored before
+    :param ed: a dictionary to maintain a list of outgoing edges from s
     :return: none
     """
     ex[s] = True  # mark s as explored
+    print "I'm at node " + s
+    for each_v in ed[s]:  # for every edge starts from s and ends at v
+        if not ex[each_v]:  # v is unexplored
+            dfs(g, each_v, ex, ed)
 
 
 
 def tests():
     # test read file
-    fn = "SCCtest.txt"
+    fn = "stest.txt"
     graph = read_file(fn)
     print graph
 
@@ -123,5 +129,7 @@ def tests():
 
     ded = generate_dic_ed(pg)
     print ded
+
+    dfs(pg, '1', dex, ded)
 
 tests()
