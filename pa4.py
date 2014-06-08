@@ -358,6 +358,9 @@ def main():
 
 #tests()
 
+"""
+check original code from https://github.com/msdubov/Algorithms-design-and-analysis/blob/master/04)%20Kosaraju%20SCC.py
+"""
 if __name__ == '__main__':
     threading.stack_size(67108864)  # 64MB stack
     sys.setrecursionlimit(2 ** 20)  # approx 1 million recursions
