@@ -4,13 +4,13 @@ __author__ = 'jeredyang'
 Question 1
 Download the text file here. Zipped version here. (Right click and save link as)
 The file contains the edges of a directed graph. Vertices are labeled as positive integers from 1 to 875714. Every row
- indicates an edge, the vertex label in first column is the tail and the vertex label in second column is the head
-  (recall the graph is directed, and the edges are directed from the first column vertex to the second column vertex).
-   So for example, the 11th row looks like : "2 47646". This just means that the vertex with label 2 has an outgoing
-   edge to the vertex with label 47646
+indicates an edge, the vertex label in first column is the tail and the vertex label in second column is the head
+(recall the graph is directed, and the edges are directed from the first column vertex to the second column vertex).
+So for example, the 11th row looks like : "2 47646". This just means that the vertex with label 2 has an outgoing
+edge to the vertex with label 47646
 
 Your task is to code up the algorithm from the video lectures for computing strongly connected components (SCCs), and
- to run this algorithm on the given graph.
+to run this algorithm on the given graph.
 
 Output Format: You should output the sizes of the 5 largest SCCs in the given graph, in decreasing order of sizes,
 separated by commas (avoid any spaces). So if your algorithm computes the sizes of the five largest SCCs to be
@@ -26,7 +26,6 @@ import sys
 import threading
 
 
-# read input file as csv file
 def read_file(file_name):
     """
     read a file of adjacent list, return a list of lists, in which each list represents a pair of points
@@ -40,6 +39,16 @@ def read_file(file_name):
         f.close()
 
     return lines
+
+
+ex_fst = {}  # a dictionary to mark if a vertex has been explored before, ex[s] is what needed here
+ex_snd = {}
+ed_fst = {}  # a dictionary to maintain a list of outgoing edges, ed[s] is what needed here
+ed_snd = {}
+seq = {}  # seq: a dic to keep track of each vertex's seq
+led = {}  # led: a dic to keep track of each vertex's leader
+t = 0  # t: current finishing time
+ldr = ''  # current leader
 
 
 def reverse_g(g):
@@ -116,79 +125,6 @@ def generate_dic_led(g):
     return dled
 
 
-# def dfs(g, s, ex, ed, led, ldr, t, seq, first_time):
-#     """
-#     depth first search on graph g from vertex s
-#     :param g: input graph
-#     :param s: start vertex s
-#     :param ex: a dictionary to mark if a vertex has been explored before
-#     :param ed: a dictionary to maintain a list of outgoing edges from s
-#     :param led: a dictionary to maintain a record of current leader vertices. key is current ldr, and value is a list of
-#             all vertices share this ldr
-#     :param ldr: current leader
-#     :param: t: current finishing time
-#     :param: seq: a dic to keep track of each vertex's seq
-#     :param:first_time: indicates if this is the first time loop
-#     :return: none
-#     """
-#     ex[s] = True  # mark s as explored
-#     print "I'm at node " + s
-#     if led[ldr] is None:
-#         led[ldr] = [s]
-#     else:
-#         led[ldr].append(s)
-#
-#     if s in ed:  # if s has outgoing edges
-#         for each_v in ed[s]:  # for every edge starts from s and ends at v
-#             if not ex[each_v]:  # v is unexplored
-#                 dfs(g, each_v, ex, ed, led, ldr, t, seq, first_time)
-#                 if first_time:
-#                     t += 1
-#                     seq[t] = seq.get(t, s)
-
-
-# def dfs_loop(g, first_time, sequence):
-#     """
-#     dfs on all vertices of graph g. keep a global variable t as the finish time for all vertices if first_time == true,
-#      or keep a global va
-#     :param g: input graph
-#     :param first_time: indicates if this is the first time loop
-#     :param sequence: seq{} for 2nd loop
-#     :return: first_time: a dic seq{} for 2nd loop
-#              2nd time: a dic led{} indicates leaders for each vertex
-#     """
-#     ex = generate_dic_ex(g)
-#     ed = generate_dic_ed(g)
-#     led = generate_dic_led(g)
-#
-#     if first_time:  # first loop
-#         t = 0  # first time loop, keep t as the finishing time
-#         seq = {}  # generate sequence dictionary for 2nd loop
-#         for each_vertex in ex:
-#             if not ex[each_vertex]:
-#                 current_leader = each_vertex
-#                 dfs(g, each_vertex, ex, ed, led, current_leader, t, seq, first_time)
-#
-#         return seq
-#     else:
-#         for index in range(len(sequence) - 1, 0, -1):
-#             s = sequence[index]
-#             if not ex[s]:
-#                 current_leader = s
-#                 dfs(g, s, ex, ed, led, current_leader, 0, sequence, first_time)
-#
-#         return led
-
-ex_fst = {}  # a dictionary to mark if a vertex has been explored before, ex[s] is what needed here
-ex_snd = {}
-ed_fst = {}  # a dictionary to maintain a list of outgoing edges, ed[s] is what needed here
-ed_snd = {}
-seq = {}   # seq: a dic to keep track of each vertex's seq
-led = {}    # led: a dic to keep track of each vertex's leader
-t = 0      # t: current finishing time
-ldr = ''  # current leader
-
-
 def dfs_first(rg, s):
     """
     depth first search on reversed graph rg from vertex s
@@ -202,7 +138,7 @@ def dfs_first(rg, s):
     global ed_fst
 
     ex_fst[s] = True  # mark s as explored
-   # print "I'm at node " + s
+    # print "I'm at node " + s
 
     if s in ed_fst:  # if s has outgoing edges
         for each_v in ed_fst[s]:  # for every edge starts from s and ends at v
@@ -249,7 +185,7 @@ def dfs_snd(g, s):
     global led
 
     ex_snd[s] = True  # mark s as explored
-#    print "I'm at node " + s
+    # print "I'm at node " + s
 
     if led[ldr] is None:
         led[ldr] = [s]
@@ -356,7 +292,7 @@ def main():
     res = kosaraju_two_pass(graph)
     print res[0:5]
 
-#tests()
+# tests()
 
 """
 check original code from https://github.com/msdubov/Algorithms-design-and-analysis/blob/master/04)%20Kosaraju%20SCC.py
@@ -364,5 +300,5 @@ check original code from https://github.com/msdubov/Algorithms-design-and-analys
 if __name__ == '__main__':
     threading.stack_size(67108864)  # 64MB stack
     sys.setrecursionlimit(2 ** 20)  # approx 1 million recursions
-    thread = threading.Thread(target=main)  # instantiate thread object
+    thread = threading.Thread(target = main)  # instantiate thread object
     thread.start()  # run program at target
