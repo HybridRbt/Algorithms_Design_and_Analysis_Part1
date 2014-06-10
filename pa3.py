@@ -252,12 +252,8 @@ def min_cut_rep(fn, delim):
 
 
 def test():
-    minct = []
-    minct.append(min_cut_rep("test1.txt", " "))
-    minct.append(min_cut_rep("test2.txt", " "))
-    minct.append(min_cut_rep("test3.txt", " "))
-    minct.append(min_cut_rep("test4.txt", " "))
-    minct.append(min_cut_rep("test5.txt", " "))
+    minct = [min_cut_rep("test1.txt", " "), min_cut_rep("test2.txt", " "), min_cut_rep("test3.txt", " "),
+             min_cut_rep("test4.txt", " "), min_cut_rep("test5.txt", " ")]
     print str(minct[0]) + ", 3"
     print str(minct[1]) + ", 2"
     print str(minct[2]) + ", 2"
